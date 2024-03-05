@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Places of Interest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="map"></div>
+    <div id="filters">
+        <label for="type">Type of POI:</label>
+        <select id="type">
+            <option value="all">All</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="museum">Museum</option>
+            <!-- Add more options as needed -->
+        </select>
+        <label for="price">Price:</label>
+        <select id="price">
+            <option value="all">All</option>
+            <option value="cheap">Cheap</option>
+            <option value="moderate">Moderate</option>
+            <option value="expensive">Expensive</option>
+            <!-- Add more options as needed -->
+        </select>
+        <label for="kidFriendly">Kid Friendly:</label>
+        <select id="kidFriendly">
+            <option value="all">All</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
