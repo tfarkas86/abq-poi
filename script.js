@@ -5,17 +5,8 @@ var placesOfInterest = [
     // Add more places of interest as needed
 ];
 
-// Initialize map
-var map = L.map('map').setView([51.505, -0.09], 13); // Adjust the initial view coordinates and zoom level as needed
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-// Add markers for each place of interest
-placesOfInterest.forEach(place => {
-    L.marker(place.latlng).addTo(map)
-        .bindPopup(`<b>${place.name}</b><br>Type: ${place.type}<br>Price: ${place.price}<br>Kid Friendly: ${place.kidFriendly}`);
-});
+// Define a global variable to store markers
+var markers = [];
 
 // Function to filter places based on selected criteria
 function filterPlaces() {
@@ -23,10 +14,8 @@ function filterPlaces() {
     var price = document.getElementById('price').value;
     var kidFriendly = document.getElementById('kidFriendly').value;
 
-    placesOfInterest.forEach(place => {
-        var marker = map.getLayers().find(layer => layer instanceof L.Marker && layer.getLatLng().equals(place.latlng));
-        if (!marker) return;
-
+    markers.forEach(marker => {
+        var place = marker.place;
         var showMarker = (type === 'all' || place.type === type) &&
                          (price === 'all' || place.price === price) &&
                          (kidFriendly === 'all' || place.kidFriendly === kidFriendly);
@@ -34,6 +23,24 @@ function filterPlaces() {
         showMarker ? marker.addTo(map) : map.removeLayer(marker);
     });
 }
+
+// Add markers for each place of interest
+placesOfInterest.forEach(place => {
+    var marker = L.marker(place.latlng).bindPopup(`<b>${place.name}</b><br>Type: ${place.type}<br>Price: ${place.price}<br>Kid Friendly: ${place.kidFriendly}`);
+    marker.place = place; // Attach place object to marker
+    markers.push(marker); // Push marker to global markers array
+});
+
+// Initialize map
+var map = L.map('map').setView([51.505, -0.09], 13); // Adjust the initial view coordinates and zoom level as needed
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Add markers to map
+markers.forEach(marker => {
+    marker.addTo(map);
+});
 
 // Attach event listeners to filter dropdowns
 document.getElementById('type').addEventListener('change', filterPlaces);
